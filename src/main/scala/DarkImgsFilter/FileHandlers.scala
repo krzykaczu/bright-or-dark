@@ -118,7 +118,7 @@ object ImgCopier {
     var isBright = false
 
     // save file to output directory
-    if (photosMeanLuminance <= cutOffPoint) {
+    if (photosMeanLuminance < cutOffPoint) {
       //implicit use of the apply method
       Saver(photo, file, outDir, "_bright_", photosMeanLuminance)
       isBright = true
