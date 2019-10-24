@@ -5,7 +5,7 @@ import java.io.{File, FileNotFoundException, IOException}
 import javax.imageio.ImageIO
 
 /** Base class providing getExtension and getFileName methods for Loader and Saver instances. */
-class FileHandler {
+abstract class FileHandler {
 
   /** Extracts extension of the provided file
    *
@@ -22,18 +22,15 @@ class FileHandler {
   def getFileName(f: File): String = f.getName.substring(0,f.getName.lastIndexOf("."))
 }
 
-/** Loads files from the provided directory for further processing
- *
- *  @constructor creates a loader of files of specified types from a provided directory
- *  @param dir String containing path of the input directory
- *  @param extensions a set of file extensions
- */
-class Loader(dir: String, extensions: Set[String]) extends FileHandler {
+/** Singleton object loading files from the provided directory for further processing */
+object Loader extends FileHandler {
   /** Reads files with the specified extensions from the specified directory
    *
+   *  @param dir String containing path of the input directory
+   *  @param extensions a set of file extensions
    *  @return list of files
    */
-  def getListOfFiles:List[File] = {
+  def getListOfFiles(dir: String, extensions: Set[String]):List[File] = {
     val d = new File(dir)
     if (d.exists && d.isDirectory) {
       d.listFiles.filter(_.isFile).filter(x => extensions.contains(getExtension(x))).toList

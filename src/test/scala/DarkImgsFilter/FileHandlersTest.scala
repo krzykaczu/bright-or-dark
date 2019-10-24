@@ -5,16 +5,16 @@ import java.awt.image.BufferedImage
 import java.io.File
 
 class FileHandlersTest extends FunSpec {
-  describe("FileHandler") {
+  describe("FileHandler / Loader") {
     val file = new File("/sth/sth/sth/file.scala")
     describe("getExtension method") {
       it("extracts file's extension") {
-        assert(new FileHandler().getExtension(file) === "scala")
+        assert(Loader.getExtension(file) === "scala")
       }
     }
     describe("getFileName method") {
       it("extracts file's name") {
-        assert(new FileHandler().getFileName(file) === "file")
+        assert(Loader.getFileName(file) === "file")
       }
     }
   }

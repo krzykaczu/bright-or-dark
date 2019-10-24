@@ -18,22 +18,20 @@ object Main extends App {
   val config = ConfigSource.default.loadOrThrow[Config]
 
   println("Loading input files...")
-  val filesLoader = new Loader(config.inDir,config.extensions)
-  val inFiles = filesLoader.getListOfFiles.par
+  val inFiles = Loader.getListOfFiles(config.inDir,config.extensions).par
   var lstOfBrights = new ArrayBuffer[String]
   // copy files, check if img is bright and, if so, append it to the ArrayBuffer
   println("Processing files...")
   for (file <- inFiles)
     if (ImgCopier.copyFileAndCheckIfBright(config.cutoffPoint, file, config.outDir))
-      lstOfBrights += filesLoader.getFileName(file)
+      lstOfBrights += Loader.getFileName(file)
 
   //calculate score based on if the resulting list of brights reflects the reference directory
   println("Calculating algorithm's accuracy...")
-  val refFilesLoader = new Loader(config.referenceInDir,config.extensions)
-  val refFiles = refFilesLoader.getListOfFiles.par
+  val refFiles = Loader.getListOfFiles(config.referenceInDir,config.extensions).par
   var score = 0
   for (refFile <- refFiles)
-    if(lstOfBrights.contains(refFilesLoader.getFileName(refFile))) {
+    if(lstOfBrights.contains(Loader.getFileName(refFile))) {
       score += 1
     }
 
