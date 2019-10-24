@@ -40,16 +40,8 @@ object Loader extends FileHandler {
   }
 }
 
-/** Saves processed files to the provided directory
- *
- *  @constructor creates a saver's instance taking care of saving files to the provided directory
- *  @param img BufferedImage-type param returned from from ImageIO.read method
- *  @param file each individual file processed by the algorithm
- *  @param outDir String containing path of the output directory
- *  @param brightOrDark String added to the output file's name
- *  @param data the computed value of mean luminance ratio added to the output file's name
- */
-class Saver(img: BufferedImage, file: File, outDir: String, brightOrDark: String, data: Long) extends FileHandler {
+/** Saves processed files to the provided directory */
+object Saver extends FileHandler {
   /** Builds the output file's full path
    *
    *  @param outDir String containing path of the output directory
@@ -64,9 +56,14 @@ class Saver(img: BufferedImage, file: File, outDir: String, brightOrDark: String
 
   /** Method creating the output file
    *
+   *  @param img BufferedImage-type param returned from from ImageIO.read method
+   *  @param file each individual file processed by the algorithm
+   *  @param outDir String containing path of the output directory
+   *  @param brightOrDark String added to the output file's name
+   *  @param data the computed value of mean luminance ratio added to the output file's name
    *  @return output img file saved to the provided path
    */
-  def apply(): Unit = {
+  def apply(img: BufferedImage, file: File, outDir: String, brightOrDark: String, data: Long): Unit = {
     try {
       ImageIO.write(img, getExtension(file), new File(buildOutFileName(outDir,getFileName(file),brightOrDark,data,getExtension(file))))
     } catch {
@@ -117,10 +114,10 @@ object ImgCopier {
     // save file to output directory
     if (photosMeanLuminance <= cutOffPoint) {
       //implicit use of the apply method
-      new Saver(photo, file, outDir, "_bright_", photosMeanLuminance)()
+      Saver(photo, file, outDir, "_bright_", photosMeanLuminance)
       isBright = true
     } else {
-      new Saver(photo, file, outDir, "_dark_", photosMeanLuminance)()
+      Saver(photo, file, outDir, "_dark_", photosMeanLuminance)
     }
     isBright
   }

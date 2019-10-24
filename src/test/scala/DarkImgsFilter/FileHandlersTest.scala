@@ -20,14 +20,11 @@ class FileHandlersTest extends FunSpec {
   }
   describe("Saver") {
     describe("buildOutFileName method") {
-      val imgMock = new BufferedImage(200,200,BufferedImage.TYPE_INT_ARGB)
-      val fileMock = new File("/sth/sth/sth/file.scala")
       val outDirMock = "/my/outdir"
       val brightOrDarkMock = "_bright_"
       val dataMock = 59
       it("returns resulting file path properly") {
-        assert(new Saver(imgMock,fileMock,outDirMock,brightOrDarkMock,dataMock)
-          .buildOutFileName(outDirMock,"file",brightOrDarkMock,dataMock,"png")
+        assert(Saver.buildOutFileName(outDirMock,"file",brightOrDarkMock,dataMock,"png")
           === "/my/outdir/file_bright_59.png")
       }
     }
