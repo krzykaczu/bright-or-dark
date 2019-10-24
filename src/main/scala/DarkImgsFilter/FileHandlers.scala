@@ -3,6 +3,9 @@ package DarkImgsFilter
 import java.awt.image.BufferedImage
 import java.io.{File, FileNotFoundException, IOException}
 import javax.imageio.ImageIO
+import scala.concurrent.duration._
+import scala.concurrent.{Await, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /** Base class providing getExtension and getFileName methods for Loader and Saver instances. */
 abstract class FileHandler {
@@ -111,9 +114,12 @@ object ImgCopier {
    *  @return Boolean value returned for the sake of algorithm's efficiency computation
    */
   def copyFileAndCheckIfBright(cutOffPoint: Double, file: File, outDir: String): Boolean = {
-    val photo = ImgReader.readFile(file) match {
-      case Some(i) => i
+    val futurePhoto = Future {
+      ImgReader.readFile(file) match {
+        case Some(i) => i
+      }
     }
+    val photo = Await.result(futurePhoto, Duration.Inf)
     val photosMeanLuminance = ImgFilter.getMeanLuminance(photo)
     var isBright = false
 

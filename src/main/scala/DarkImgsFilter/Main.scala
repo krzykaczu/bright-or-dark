@@ -20,7 +20,7 @@ object Main extends App {
   println("Loading input files...")
   val inFiles = Loader.getListOfFiles(config.inDir,config.extensions).par
   var lstOfBrights = new ArrayBuffer[String]
-  // copy files, check if img is bright and, if so, append it to the ArrayBuffer
+  // copy files, check if img is bright and, if so, append it to the ArrayBuffer§
   println("Processing files...")
   for (file <- inFiles)
     if (ImgCopier.copyFileAndCheckIfBright(config.cutoffPoint, file, config.outDir))
