@@ -49,6 +49,10 @@ class FileHandlersTest extends FunSpec {
         val cutoffPointMock = 50
         assert(ImgCopier.copyFileAndCheckIfBright(cutoffPointMock,file,outDir) === false)
       }
+      it("returns false for cutoffPoint = 66") {
+        val cutoffPointMock = 66
+        assert(ImgCopier.copyFileAndCheckIfBright(cutoffPointMock,file,outDir) === false)
+      }
     }
   }
 }
