@@ -73,12 +73,16 @@ object Saver extends FileHandler {
    *  @return output img file saved to the provided path
    */
   def apply(img: BufferedImage, file: File, outDir: String, brightOrDark: String, data: Long): Unit = {
-    try {
-      ImageIO.write(img, getExtension(file), new File(buildOutFileName(outDir,getFileName(file),brightOrDark,data,getExtension(file))))
-    } catch {
-      case x: IllegalArgumentException => println("Exception: One or many parameters are null")
-      case y: IOException => println("Input/output Exception")
-    }
+    Await.result(
+      Future {
+        try {
+          ImageIO.write(img, getExtension(file), new File(buildOutFileName(outDir,getFileName(file),brightOrDark,data,getExtension(file))))
+        } catch {
+          case x: IllegalArgumentException => println("Exception: One or many parameters are null")
+          case y: IOException => println("Input/output Exception")
+        }
+      }, Duration.Inf
+    )
 
   }
 }
