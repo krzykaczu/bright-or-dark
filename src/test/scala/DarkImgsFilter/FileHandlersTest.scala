@@ -7,14 +7,21 @@ import java.io.File
 class FileHandlersTest extends FunSpec {
   describe("FileHandler / Loader") {
     val file = new File("/sth/sth/sth/file.scala")
+    val emptyFile = new File("")
     describe("getExtension method") {
       it("extracts file's extension") {
         assert(Loader.getExtension(file) === "scala")
+      }
+      it("handles empty files properly") {
+        assert(Loader.getExtension(emptyFile) === "")
       }
     }
     describe("getFileName method") {
       it("extracts file's name") {
         assert(Loader.getFileName(file) === "file")
+      }
+      it("handles empty files properly") {
+        assert(Loader.getFileName(emptyFile) === "")
       }
     }
   }

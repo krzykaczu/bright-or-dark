@@ -12,14 +12,20 @@ abstract class FileHandler {
    *  @param f file
    *  @return file extension
    */
-  def getExtension(f: File): String = f.getName.split("\\.").lastOption.get
+  def getExtension(f: File): String = f.getName.split("\\.").lastOption match {
+    case Some(i) => i
+    case None => ""
+  }
 
   /** Extracts file name of the provided file
    *
    *  @param f file
    *  @return file name
    */
-  def getFileName(f: File): String = f.getName.substring(0,f.getName.lastIndexOf("."))
+  def getFileName(f: File): String = f.getName.split("\\.").headOption match {
+    case Some(i) => i
+    case None => ""
+  }
 }
 
 /** Singleton object loading files from the provided directory for further processing */
