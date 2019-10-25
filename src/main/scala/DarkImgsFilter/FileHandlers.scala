@@ -25,8 +25,8 @@ abstract class FileHandler {
    *  @param f file
    *  @return file name
    */
-  def getFileName(f: File): String = f.getName.split("\\.").headOption match {
-    case Some(i) => i
+  def getFileName(f: File): String = Option(f.getName.split("\\.").init.mkString(".")) match {
+    case Some(i) => i.toString
     case None => ""
   }
 }
@@ -83,7 +83,6 @@ object Saver extends FileHandler {
         }
       }, Duration.Inf
     )
-
   }
 }
 
@@ -95,17 +94,21 @@ object ImgReader {
    *  @return BufferImage
    */
   def readFile(file: File): Option[BufferedImage] = {
-    try {
-      Some(ImageIO.read(file))
-    } catch {
-      case x: FileNotFoundException =>
-        println("Exception: File missing")
-        None
-      case y: IOException =>
-        println("Input/output Exception")
-        None
+    Await.result (
+        Future {
+          try {
+            Some(ImageIO.read(file))
+          } catch {
+            case x: FileNotFoundException =>
+              println("Exception: File missing")
+              None
+            case y: IOException =>
+              println("Input/output Exception")
+              None
+          }
+        }, Duration.Inf
+      )
     }
-  }
 }
 
 /** Singleton object for copying, saving and labeling the read files based on the mean luminance computations */
@@ -118,12 +121,10 @@ object ImgCopier {
    *  @return Boolean value returned for the sake of algorithm's efficiency computation
    */
   def copyFileAndCheckIfBright(cutOffPoint: Double, file: File, outDir: String): Boolean = {
-    val futurePhoto = Future {
+    val photo =
       ImgReader.readFile(file) match {
         case Some(i) => i
       }
-    }
-    val photo = Await.result(futurePhoto, Duration.Inf)
     val photosMeanLuminance = ImgFilter.getMeanLuminance(photo)
     var isBright = false
 

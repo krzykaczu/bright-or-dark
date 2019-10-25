@@ -8,6 +8,7 @@ class FileHandlersTest extends FunSpec {
   describe("FileHandler / Loader") {
     val file = new File("/sth/sth/sth/file.scala")
     val emptyFile = new File("")
+    val fileWithMultipleDots = new File("/sth/sth/sth/file.1.1.img")
     describe("getExtension method") {
       it("extracts file's extension") {
         assert(Loader.getExtension(file) === "scala")
@@ -22,6 +23,9 @@ class FileHandlersTest extends FunSpec {
       }
       it("handles empty files properly") {
         assert(Loader.getFileName(emptyFile) === "")
+      }
+      it("handles files with multiple dots properly") {
+        assert(Loader.getFileName(fileWithMultipleDots) === "file.1.1")
       }
     }
   }
