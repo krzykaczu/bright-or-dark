@@ -1,7 +1,6 @@
 package DarkImgsFilter
 
 import org.scalatest.FunSpec
-import java.awt.image.BufferedImage
 import java.io.File
 
 class FileHandlersTest extends FunSpec {

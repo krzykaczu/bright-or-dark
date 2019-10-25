@@ -4,7 +4,6 @@ import pureconfig._
 import pureconfig.generic.auto._
 import scala.collection.mutable
 import scala.collection.immutable
-import scala.collection.parallel.CollectionConverters._
 
 object Main extends App {
 
